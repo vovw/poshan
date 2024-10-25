@@ -12,7 +12,6 @@ client/coverage
 # next.js
 client/.next/
 client/out/
-client
 
 # production
 client/build
