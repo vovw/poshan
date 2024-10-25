@@ -3,12 +3,14 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 const CameraCapture = () => {
   let [postData, setPostData] = useState({
     user_id: "",
     image_url: "",
   });
   const videoRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState(null);
@@ -16,17 +18,12 @@ const CameraCapture = () => {
   // Start camera
   const startCamera = async () => {
     try {
-      // Check if the device is mobile
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
       const streamData = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: isMobile ? "environment" : "user",
-          // 'environment' for back camera on mobile
-          // 'user' for front camera on desktop/laptop
         },
       });
-
       videoRef.current.srcObject = streamData;
       setStream(streamData);
     } catch (err) {
@@ -39,23 +36,40 @@ const CameraCapture = () => {
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-
     canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
     const photoData = canvas.toDataURL("image/jpeg");
-    console.log("Captured Photo Data:", photoData); // Console log the photo data
     setPhoto(photoData);
 
-    // Upload photo to Cloudinary via API route
     setPostData({
       user_id: "hvwvchjke",
       image_url: "kjjbicikjcjwbelcnlk",
     });
     backendUpload(photoData);
-    // Stop camera after taking photo
+
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
   };
+
+  // Handle file upload
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const photoData = e.target.result;
+        setPhoto(photoData);
+        backendUpload(photoData);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Trigger file input click
+  const triggerFileUpload = () => {
+    fileInputRef.current.click();
+  };
+
   let backendUpload = async (base64) => {
     let headers = {
       "Content-Type": "application/json",
@@ -77,36 +91,48 @@ const CameraCapture = () => {
     }
   };
 
-  // Upload photo to Cloudinary via API route
-
-  // Retake photo
-  const retakePhoto = () => {
+  // Retake photo or reset upload
+  const resetImage = () => {
     setPhoto(null);
     setUploadedPhotoUrl(null);
-    startCamera();
+    if (stream) {
+      startCamera();
+    }
   };
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {!photo ? (
         <>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full max-w-[500px] rounded-lg"
-          />
-          {!stream ? (
-            <Button onClick={startCamera}>Start Camera</Button>
-          ) : (
-            <Button onClick={takePhoto}>Take Photo</Button>
+          <div className="flex gap-4 mb-4">
+            <Button onClick={startCamera}>Use Camera</Button>
+            <Button onClick={triggerFileUpload}>Upload Image</Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+
+          {stream && (
+            <>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full max-w-[500px] rounded-lg"
+              />
+              <Button onClick={takePhoto}>Take Photo</Button>
+            </>
           )}
         </>
       ) : (
         <div className="flex flex-col items-center gap-4">
           <img
             src={photo}
-            alt="Captured photo"
+            alt="Captured or uploaded photo"
             className="w-full max-w-[500px] rounded-lg"
           />
           {uploadedPhotoUrl && (
@@ -121,7 +147,9 @@ const CameraCapture = () => {
               </a>
             </div>
           )}
-          <Button onClick={retakePhoto}>Retake Photo</Button>
+          <Button onClick={resetImage}>
+            {stream ? "Retake Photo" : "Upload Another Image"}
+          </Button>
         </div>
       )}
     </div>
