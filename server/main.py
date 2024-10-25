@@ -1,8 +1,10 @@
 from fastapi import FastAPI,WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict,List,Union
+from database import Base,engine
 
 from routes import userRoute
+from routes import mealRoute
 app = FastAPI()
 
 origins=["http://localhost:3000"]
@@ -14,7 +16,9 @@ app.add_middleware(
     allow_headers=["*"],  # Headers to allow
 )
 
+Base.metadata.create_all(bind=engine)
 app.include_router(userRoute.router)
+app.include_router(mealRoute.router)
 
 @app.get("/")
 def read_root():
