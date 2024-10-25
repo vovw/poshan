@@ -7,3 +7,9 @@ class mealReq(BaseModel):
 class mealRes(BaseModel):
     message:str
     error: bool
+
+class getMealsReq(BaseModel):
+    user_id:str
+
+class getMealsRes(BaseModel):
+    meals: list[Meal]
