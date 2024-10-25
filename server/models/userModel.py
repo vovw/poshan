@@ -7,3 +7,5 @@ class userReqMod(BaseModel):
 class userResMod(BaseModel):
     error:bool
     token:str
+
+
