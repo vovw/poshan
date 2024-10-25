@@ -1,3 +1,9 @@
+"""
+def analyze_meal_image(image_link)
+
+returns the json hopefully
+"""
+
 import requests
 import json
 import os
@@ -23,34 +29,50 @@ def analyze_meal_image(image_link):
     current_date = datetime.now().strftime("%Y-%m-%d")
     meal_type = get_meal_type()
 
-    prompt = f"""Analyze this image and output only a JSON object with this exact structure:
-    {{
-        "time": "{current_time}",
-        "date": "{current_date}",
-        "name": "{meal_type}",
-        "imageurl": "{image_link}",
-        "items": [
-            {{
-                "name": "item_name",
-                "quantity": "the quantity",
-                "calories": "the amount calories as a number",
-                "protein": "the amount of portien as a number",
-                "carbs": "the amount of carbohydrates as a number",
-                "fats": "the amount of fats as a number"
-            }}
-        ]
-    }}
+    prompt = f"""Analyze this food image and provide detailed nutritional information in the following JSON only. No additional text or explanations.
 
-    Identify each food item visible in the image and include realistic nutritional values.
-    Return only valid JSON, no other text."""
+    just repeat the prompt again just fill in the places where <> is used, dont say anything else. do not say sure here is your json or anything of that sort
+    also do not say anyhting at the end like NOTE: or anything
 
+<PROMPT_STARTS_HERE>
+{{
+    "time": "{current_time}",
+    "date": "{current_date}",
+    "name": "{meal_type}",
+    "imageurl": "{image_link}",
+    "items": [
+        {{
+            "name": "<item_name>",
+            "quantity": "<serving size>",
+            "calories": <number>,
+            "protein": <number>,
+            "carbs": <number>,
+            "fats": <number>
+        }}
+    ]
+}}
+<PROMPT_END_HERE>
+
+Ensure:
+1. All nutritional values are numbers (not strings)
+2. Each visible food item is listed separately
+3. Quantities are realistic serving sizes
+4. Nutritional values are accurate estimates
+5. DO NOT RESPOND IN MARKDOWN
+6. Only respond in JSON
+7. <xyz> says fill in the blank
+
+"""
     response = requests.post(
         url="https://openrouter.ai/api/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         },
         data=json.dumps({
-            "model": "meta-llama/llama-3.2-90b-vision-instruct",
+            # "model": "meta-llama/llama-3.2-90b-vision-instruct",
+            # "model": "google/gemini-pro-vision",
+            # "model": "anthropic/claude-3.5-sonnet",
+            "model": "meta-llama/llama-3.2-11b-vision-instruct:free",
             "messages": [
                 {
                     "role": "user",
@@ -74,7 +96,7 @@ def analyze_meal_image(image_link):
     return response.json()
 
 # Example usage
-image_link = "https://i.ibb.co/ch4NrZk/IMG-20241025-213138791-HDR-AE.jpg"
+image_link = "https://media-cdn.tripadvisor.com/media/photo-s/0b/12/a2/c3/southern-fried-chicken.jpg"
 result = analyze_meal_image(image_link)
 
 print(result['choices'][0]['message']['content'])
