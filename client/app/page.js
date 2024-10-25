@@ -60,8 +60,8 @@ const LandingPage = () => {
           <Image
             src="/ui.png"
             alt="Healthy Food"
-            width="100"
-            height="100"
+            width={100}
+            height={100}
             layout="responsive"
             objectFit="contain"
           />
