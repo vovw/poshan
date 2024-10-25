@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict,List,Union
 from database import Base,engine
 
+
+import uvicorn
+
 from routes import userRoute
 from routes import mealRoute
 app = FastAPI()
@@ -23,3 +26,8 @@ app.include_router(mealRoute.router)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+
+
+if __name__=="__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

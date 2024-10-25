@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import Image from "next/image";
@@ -60,8 +61,8 @@ const LandingPage = () => {
           <Image
             src="/ui.png"
             alt="Healthy Food"
-            width="100"
-            height="100"
+            width={100}
+            height={100}
             layout="responsive"
             objectFit="contain"
           />
@@ -120,8 +121,8 @@ const LandingPage = () => {
                 className="bg-white p-6 rounded-xl shadow-sm"
               >
                 <p className="text-gray-600 mb-4">
-                  "Poshan has completely changed how I think about food. The
-                  insights are incredible!"
+                  &quot;Poshan has completely changed how I think about food.
+                  The insights are incredible!&quot;
                 </p>
                 <div className="font-semibold text-green-800">- Happy User</div>
               </div>

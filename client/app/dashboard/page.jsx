@@ -158,7 +158,7 @@ const ModernFoodTracker = () => {
 
       {/* Meals List */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Today's Meals</h2>
+        <h2 className="text-xl font-semibold">Todays Meals</h2>
         {meals.map((meal) => (
           <Card
             key={meal.id}
