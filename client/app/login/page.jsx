@@ -1,5 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -12,8 +15,8 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function Login() {
+  let router = useRouter();
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -23,10 +26,6 @@ export default function Login() {
 
   const validateForm = () => {
     let tempErrors = {};
-    if (!formData.username.trim()) {
-      tempErrors.username = "Username is required";
-    }
-
     if (!formData.email.trim()) {
       tempErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -58,18 +57,28 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
+    let headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
       try {
         // Add your registration logic here
+        let res = await axios.post("http://127.0.0.1:8000/login", formData, {
+          headers,
+        });
+        if (res.data.error == false) {
+          Cookies.set("user", res.data.token, { expires: 7 });
+          router.push("/click");
+        } else raiseError("error at registration");
         console.log("Form submitted:", formData);
         // Example API call:
         // await axios.post('/api/register', formData);
 
         // Reset form after successful submission
         setFormData({
-          username: "",
           email: "",
           password: "",
         });
@@ -90,22 +99,6 @@ export default function Login() {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <Label>Username</Label>
-                <Input
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Username"
-                  disabled={isLoading}
-                />
-                {errors.username && (
-                  <span className="text-sm text-red-500">
-                    {errors.username}
-                  </span>
-                )}
-              </div>
-
               <div className="flex flex-col gap-2">
                 <Label>Email</Label>
                 <Input
@@ -154,5 +147,3 @@ export default function Login() {
     </div>
   );
 }
-
-
