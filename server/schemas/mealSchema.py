@@ -13,8 +13,19 @@ class Meal(Base):
     __tablename__ = 'meals'
     
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), nullable=False)
     time = Column(String, nullable=False)
     name = Column(String, nullable=True)
     image_url = Column(String, nullable=True)
     
     items = Column(JSON, nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'name':self.name,
+            'time':self.time,
+            'image_url':self.image_url,
+            'items':self.items
+        }

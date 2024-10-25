@@ -96,7 +96,7 @@ Ensure:
     return response.json()
 
 # Example usage
-image_link = "https://media-cdn.tripadvisor.com/media/photo-s/0b/12/a2/c3/southern-fried-chicken.jpg"
-result = analyze_meal_image(image_link)
+# image_link = "https://media-cdn.tripadvisor.com/media/photo-s/0b/12/a2/c3/southern-fried-chicken.jpg"
+# result = analyze_meal_image(image_link)
 
-print(result['choices'][0]['message']['content'])
+# print(result['choices'][0]['message']['content'])

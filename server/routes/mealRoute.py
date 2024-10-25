@@ -9,6 +9,8 @@ from ai import analyze_meal_image
 import json
 from helper import upload_image_to_drive
 import time
+from auth import jwt_decode, jwt_encode, hashed_pass, verify_hash_pass
+from typing import Any
 
 
 router = APIRouter()
@@ -40,19 +42,22 @@ async def upload_meal(req: mealReq, db: db_dependancy):
         meal_id = uuid4()
         new_meal = Meal(
             name="Breakfast",
-            time="22:27",
+            time="04:09",
             image_url=imgurl,
-            items=[{
+            items=[
+                {
                 "name": "Apple",
                 "quantity": 1,
                 "calories": 95
-            }]
+            }
+            ],
+            user_id=UUID(req.user_id)
         )
         # print(new_meal)
         # Add the meal to the session
-        await db.add(new_meal)
-        await db.commit()
-        await db.refresh(new_meal)
+        db.add(new_meal)
+        db.commit()
+        db.refresh(new_meal)
 
         return {"message": "Meal created successfully", "error": False}
     except Exception as e:
@@ -61,7 +66,8 @@ async def upload_meal(req: mealReq, db: db_dependancy):
         raise HTTPException(status_code=500, detail="Failed to create meal")
 
 
-@router.get("/get-meals/", response_model=getMealsRes)
-async def get_meals(req:getMealsReq,db: db_dependancy):
-    meals = await db.query(Meal).match({"user_id":getMealsReq.user_id}).all()
-    return meals
+@router.post("/get-all-meals/", response_model=Any)
+async def get_meals(req: getMealsReq, db: db_dependancy):
+    decoded = jwt_decode(req.user_id)
+    allmeals = db.query(Meal).filter(Meal.user_id == decoded).all()
+    return allmeals
