@@ -4,11 +4,17 @@ from fastapi import Depends
 from sqlalchemy.ext.declarative import declarative_base
 from typing import Annotated
 import models
-DB_USER = "postgres.pglfcdzhnxfpawsuoydd"
-DB_PASSWORD = "Poshan_12345_rane"  # Replace with your actual password
-DB_HOST = "aws-0-ap-south-1.pooler.supabase.com"
-DB_PORT = "6543"
-DB_NAME = "postgres"
+import dotenv
+import os
+
+dotenv.load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
 # url_database='postgresql://postgres.tiqriynlomatzjzpqkbf:LZRmYtcQOg77uMUY@aws-0-ap-south-1.pooler.supabase.com:6543/postgres'
 url_database = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 

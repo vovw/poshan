@@ -1,12 +1,9 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Time
-from sqlalchemy.ext.declarative import declarative_base
+from database import Base
 from sqlalchemy.orm import relationship
 from datetime import time
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-
-# Define the Base class for SQLAlchemy models
-Base = declarative_base()
 
 class Meal(Base):
     __tablename__ = 'meals'
