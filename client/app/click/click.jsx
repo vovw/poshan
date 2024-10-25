@@ -16,9 +16,17 @@ const CameraCapture = () => {
   // Start camera
   const startCamera = async () => {
     try {
+      // Check if the device is mobile
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
       const streamData = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: {
+          facingMode: isMobile ? "environment" : "user",
+          // 'environment' for back camera on mobile
+          // 'user' for front camera on desktop/laptop
+        },
       });
+
       videoRef.current.srcObject = streamData;
       setStream(streamData);
     } catch (err) {
