@@ -12,7 +12,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Leaf className="text-green-600" size={24} />
-            <span className="text-2xl font-bold text-green-800">Poshan</span>
+            <span className="text-2xl font-bold text-green-800">poषण</span>
           </div>
           <div className="hidden md:flex gap-8 text-gray-600">
             <a href="#features" className="hover:text-green-600">
@@ -27,10 +27,10 @@ const LandingPage = () => {
           </div>
           <div className="flex gap-4">
             <button className="text-green-600 hover:text-green-700">
-              Login
+              <a href="/login">Login</a>
             </button>
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-              Get Started
+              <a href="/register">Get Started</a>
             </button>
           </div>
         </div>
@@ -72,7 +72,7 @@ const LandingPage = () => {
       <section id="features" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-green-800 mb-16">
-            Why Choose Poshan?
+            Why Choose poषण?
           </h2>
           <div className="grid md:grid-cols-3 gap-12">
             {[
@@ -80,19 +80,19 @@ const LandingPage = () => {
                 icon: <Battery className="text-green-600" size={32} />,
                 title: "Smart Tracking",
                 description:
-                  "Effortlessly track your meals with AI-powered image recognition and instant nutritional analysis.",
+                  "Effortlessly track your meals with AI-powered vision llama models and instant nutritional analysis.",
               },
               {
                 icon: <Brain className="text-green-600" size={32} />,
                 title: "Personalized Insights",
                 description:
-                  "Get tailored recommendations based on your goals, preferences, and dietary restrictions.",
+                  "Get tailored recommendations and suggestions based on your goals, preferences, and dietary restrictions.",
               },
               {
                 icon: <Heart className="text-green-600" size={32} />,
                 title: "Holistic Approach",
                 description:
-                  "Focus on overall wellness, not just calories. Track nutrients, mood, and energy levels.",
+                  "Focus on overall diet wellness, not just calories. Track nutrients and diet habits.",
               },
             ].map((feature, index) => (
               <div key={index} className="text-center">
