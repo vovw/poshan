@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment folder
+.venv/
+
+# VSCode settings (if using VSCode)
+.vscode/
+
+# PyCharm settings (if using PyCharm)
+.idea/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Local development and testing
+.DS_Store
+*.sqlite3
+
+# pytest cache
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+*.py,cover
+
+# Caches
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Temporary files
+*.bak
+*.swp
