@@ -7,6 +7,8 @@ from uuid import UUID, uuid4
 from models import mealReq, mealRes, getMealsReq, getMealsRes
 from ai import analyze_meal_image
 import json
+from helper import upload_image_to_drive
+import time
 
 
 router = APIRouter()
@@ -31,16 +33,22 @@ Base.metadata.create_all(bind=engine)
 async def upload_meal(req: mealReq, db: db_dependancy):
     try:
         # Create a new Meal object
-        meal_id = await uuid4()
-        response = await analyze_meal_image(req.image_url)['choices'][0]['message']['content']
-        json_data = await convert_to_json(response)
-        new_meal = await Meal(
-            name=json_data['name'], 
-            time=json_data['time'], 
-            image_url=req.image_url,
-            items=json_data['items']
+        imgurl = await upload_image_to_drive(req.image_base64)
+        # time.sleep(10)
+        # print(imgurl)
+        # print(req)
+        meal_id = uuid4()
+        new_meal = Meal(
+            name="Breakfast",
+            time="22:27",
+            image_url=imgurl,
+            items=[{
+                "name": "Apple",
+                "quantity": 1,
+                "calories": 95
+            }]
         )
-        
+        # print(new_meal)
         # Add the meal to the session
         await db.add(new_meal)
         await db.commit()
