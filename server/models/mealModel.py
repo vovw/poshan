@@ -10,8 +10,7 @@ class MealItem(BaseModel):
     fats: int
 
 class Meal(BaseModel):
-    id: int
-    time: str
+    time : str
     name: str
     imageUrl: str
     items: List[MealItem]
