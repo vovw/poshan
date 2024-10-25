@@ -8,4 +8,3 @@ class userResMod(BaseModel):
     error:bool
     token:str
 
-
