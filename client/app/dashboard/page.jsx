@@ -128,7 +128,7 @@ const ModernFoodTracker = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="text-green-500" size={20} />
-              Today's Summary
+              Todays Summary
             </CardTitle>
           </CardHeader>
           <CardContent>

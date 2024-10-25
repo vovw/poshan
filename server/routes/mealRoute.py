@@ -17,8 +17,8 @@ async def upload_meal(req: mealReq, db: db_dependancy):
         # Create a new Meal object
         meal_id = uuid4()
         new_meal = Meal(
-            name="Breakfast", 
-            time="22:27", 
+            name="Breakfast",
+            time="22:27",
             image_url=req.image_url,
             items=[{
                 "name": "Apple",
@@ -26,7 +26,7 @@ async def upload_meal(req: mealReq, db: db_dependancy):
                 "calories": 95
             }]
         )
-        
+
         # Add the meal to the session
         db.add(new_meal)
         db.commit()
@@ -37,4 +37,3 @@ async def upload_meal(req: mealReq, db: db_dependancy):
         # Handle exceptions
         print(f"Error occurred: {e}")
         raise HTTPException(status_code=500, detail="Failed to create meal")
-

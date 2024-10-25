@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Cookies from "js-cookie";
 const CameraCapture = () => {
+  let [postData, setPostData] = useState({
+    user_id: "",
+    image_url: "",
+  });
   const videoRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
@@ -34,20 +38,30 @@ const CameraCapture = () => {
     setPhoto(photoData);
 
     // Upload photo to Cloudinary via API route
-
+    setPostData({
+      user_id: "hvwvchjke",
+      image_url: "kjjbicikjcjwbelcnlk",
+    });
+    backendUpload(photoData);
     // Stop camera after taking photo
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
+  };
+  let backendUpload = async (base64) => {
     let headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
     try {
       const user = Cookies.get("user");
+      console.log(user);
       let response = await axios.post(
         "http://127.0.0.1:8000/upload-meal",
-        { photoData, user },
+        {
+          user_id: user,
+          image_url: base64,
+        },
         { headers },
       );
     } catch (e) {
