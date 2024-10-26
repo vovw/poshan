@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models import userRegister,userlogin,userResMod
+from models import userRegister,userlogin,userResMod,getGoalsReq,getGoalsRes
 from auth import jwt_decode, jwt_encode, hashed_pass, verify_hash_pass
 from database import db_dependancy
 from database import Base,engine
@@ -37,3 +37,10 @@ async def register(req:userRegister,db:db_dependancy):
     db.refresh(user)
     token=jwt_encode(str(user.id))
     return {"error":False,"token":token}
+
+Base.metadata.create_all(bind=engine)
+@router.post("/get-goals",response_model=getGoalsRes)
+async def register(req:getGoalsReq,db:db_dependancy):
+    user_id = jwt_decode(req.user_id)
+    user=db.query(User).filter(User.id==user_id).first()
+    return {"error":False,"calories":user.calories,"protein":user.protein,"carbs":user.carbs,"fats":user.fats}

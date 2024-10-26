@@ -15,3 +15,13 @@ class userlogin(BaseModel):
 class userResMod(BaseModel):
     error:bool
     token:str
+
+class getGoalsReq(BaseModel):
+    user_id:str
+
+class getGoalsRes(BaseModel):
+    error:bool
+    calories:int
+    protein:int
+    carbs:int
+    fats:int
