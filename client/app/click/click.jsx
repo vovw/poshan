@@ -1,24 +1,53 @@
 "use client";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Dumbbell, Utensils, Apple, Timer } from "lucide-react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const CameraCapture = () => {
+const LoadingSpinner = () => {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <div className="relative">
+        <div className="relative w-24 h-24 animate-spin">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Dumbbell className="w-8 h-8 text-blue-500" />
+          </div>
+          <div className="absolute top-1/2 right-0 translate-y-1/2 translate-x-1/2">
+            <Apple className="w-8 h-8 text-green-500" />
+          </div>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+            <Utensils className="w-8 h-8 text-orange-500" />
+          </div>
+          <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2">
+            <Timer className="w-8 h-8 text-purple-500" />
+          </div>
+        </div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="w-12 h-12 bg-gray-100 rounded-full animate-pulse" />
+        </div>
+        <div className="absolute inset-0 rounded-full border-4 border-dashed border-gray-200 animate-[spin_10s_linear_infinite]" />
+        <div className="absolute inset-0 rounded-full border-4 border-dashed border-gray-200 animate-[spin_8s_linear_infinite_reverse]" />
+      </div>
+    </div>
+  );
+};
+
+const CameraCapture = ({reload,setReload}) => {
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState(null);
-  // Start camera
+  let router = useRouter();
   const startCamera = async () => {
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const streamData = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: isMobile ? "environment" : "user",
-          // 'environment' for back camera on mobile
-          // 'user' for front camera on desktop/laptop
         },
       });
       videoRef.current.srcObject = streamData;
@@ -27,7 +56,8 @@ const CameraCapture = () => {
       console.error("Error:", err);
     }
   };
-  // Take photo
+
+
   const takePhoto = async () => {
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
@@ -41,7 +71,6 @@ const CameraCapture = () => {
     }
   };
 
-  // Handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -55,12 +84,12 @@ const CameraCapture = () => {
     }
   };
 
-  // Trigger file input click
   const triggerFileUpload = () => {
     fileInputRef.current.click();
   };
 
-  let backendUpload = async (base64) => {
+  const backendUpload = async (base64) => {
+    setLoading(true);
     let headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -74,14 +103,23 @@ const CameraCapture = () => {
           user_id: user,
           image_base64: base64,
         },
-        { headers },
+        { headers }
       );
+      setLoading(false);
+      setReload(true)
+      router.push("/dashboard");
+      router.refresh();
     } catch (e) {
       console.log(e);
+      setLoading(false);
+    } finally{
+      setLoading(false);
+      setReload(true);
+      router.push("/dashboard");
+      router.refresh();
     }
   };
 
-  // Retake photo or reset upload
   const resetImage = () => {
     setPhoto(null);
     setUploadedPhotoUrl(null);
@@ -91,7 +129,6 @@ const CameraCapture = () => {
   };
 
   const uploadImage = () => {
-    // Create a hidden file input
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
@@ -102,15 +139,11 @@ const CameraCapture = () => {
         reader.onload = (event) => {
           const base64Image = event.target.result;
           setPhoto(base64Image);
-
-          // Upload photo to backend
           backendUpload(base64Image);
         };
         reader.readAsDataURL(file);
       }
     };
-
-    // Trigger file input click
     input.click();
   };
 
@@ -130,8 +163,7 @@ const CameraCapture = () => {
             ) : (
               <Button onClick={takePhoto}>Take Photo</Button>
             )}
-
-            <Button onClick={uploadImage}>upload image</Button>
+            <Button onClick={uploadImage}>Upload Image</Button>
           </div>
         </>
       ) : (
@@ -141,21 +173,10 @@ const CameraCapture = () => {
             alt="Captured or uploaded photo"
             className="w-full max-w-[500px] rounded-lg"
           />
-          {uploadedPhotoUrl && (
-            <div>
-              <p>Uploaded Photo URL:</p>
-              <a
-                href={uploadedPhotoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {uploadedPhotoUrl}
-              </a>
-            </div>
-          )}
-          <Button onClick={resetImage}>
+          <Button onClick={resetImage} disabled={loading}>
             {stream ? "Retake Photo" : "Upload Another Image"}
           </Button>
+          {loading && <LoadingSpinner />}
         </div>
       )}
     </div>

@@ -8,6 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const ModernFoodTracker = () => {
   const [meals, setMeals] = useState([]);
+  const [reload, setReload] = useState(false);
   const [dailyGoals, setDailyGoals] = useState({
     calories: 2000,
     protein: 80,
@@ -41,11 +42,10 @@ const ModernFoodTracker = () => {
     });
     setCurrentStats(newstats);
   }, [meals]);
-
   useEffect(() => {
     fetchMeals();
     fetchGoals();
-  }, []);
+  }, [reload]);
   let fetchMeals = async () => {
     try {
       let user = Cookies.get("user");
@@ -109,7 +109,7 @@ const ModernFoodTracker = () => {
       {/* Header Section */}
       <div className="flex flex-col justify-between items-center">
         <h1 className="text-2xl font-bold">Nutrition Tracker</h1>
-        <CameraCapture />
+        <CameraCapture reload={reload} setReload={setReload} />
       </div>
 
       {/* Stats Grid */}
