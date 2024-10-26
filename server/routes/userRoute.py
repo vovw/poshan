@@ -40,7 +40,7 @@ async def register(req:userRegister,db:db_dependancy):
 
 Base.metadata.create_all(bind=engine)
 @router.post("/get-goals",response_model=getGoalsRes)
-async def register(req:getGoalsReq,db:db_dependancy):
+async def getGoals(req:getGoalsReq,db:db_dependancy):
     user_id = jwt_decode(req.user_id)
     user=db.query(User).filter(User.id==user_id).first()
     return {"error":False,"calories":user.calories,"protein":user.protein,"carbs":user.carbs,"fats":user.fats}
