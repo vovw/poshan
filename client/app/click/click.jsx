@@ -5,10 +5,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const CameraCapture = () => {
-  let [postData, setPostData] = useState({
-    user_id: "",
-    image_url: "",
-  });
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
   const [photo, setPhoto] = useState(null);
@@ -22,6 +18,8 @@ const CameraCapture = () => {
       const streamData = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: isMobile ? "environment" : "user",
+          // 'environment' for back camera on mobile
+          // 'user' for front camera on desktop/laptop
         },
       });
       videoRef.current.srcObject = streamData;
@@ -39,13 +37,7 @@ const CameraCapture = () => {
     canvas.getContext("2d").drawImage(videoRef.current, 0, 0);
     const photoData = canvas.toDataURL("image/jpeg");
     setPhoto(photoData);
-
-    setPostData({
-      user_id: "hvwvchjke",
-      image_url: "kjjbicikjcjwbelcnlk",
-    });
     backendUpload(photoData);
-
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
@@ -82,7 +74,7 @@ const CameraCapture = () => {
         "http://127.0.0.1:8000/upload-meal",
         {
           user_id: user,
-          image_url: base64,
+          image_base64: base64,
         },
         { headers },
       );
@@ -100,33 +92,49 @@ const CameraCapture = () => {
     }
   };
 
+  const uploadImage = () => {
+    // Create a hidden file input
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Image = event.target.result;
+          setPhoto(base64Image);
+
+          // Upload photo to backend
+          backendUpload(base64Image);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Trigger file input click
+    input.click();
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {!photo ? (
         <>
-          <div className="flex gap-4 mb-4">
-            <Button onClick={startCamera}>Use Camera</Button>
-            <Button onClick={triggerFileUpload}>Upload Image</Button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              accept="image/*"
-              className="hidden"
-            />
-          </div>
-
-          {stream && (
-            <>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                className="w-full max-w-[500px] rounded-lg"
-              />
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full max-w-[500px] rounded-lg"
+          />
+          <div className="flex flex-row gap-6">
+            {!stream ? (
+              <Button onClick={startCamera}>Start Camera</Button>
+            ) : (
               <Button onClick={takePhoto}>Take Photo</Button>
-            </>
-          )}
+            )}
+
+            <Button onClick={uploadImage}>upload image</Button>
+          </div>
         </>
       ) : (
         <div className="flex flex-col items-center gap-4">
