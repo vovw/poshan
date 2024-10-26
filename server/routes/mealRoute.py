@@ -35,7 +35,7 @@ Base.metadata.create_all(bind=engine)
 async def upload_meal(req: mealReq, db: db_dependancy):
     # try:
         # Create a new Meal object
-        user_id = req.user_id
+        user_id = jwt_decode(req.user_id)
         imgurl = await upload_image_to_drive(req.image_base64)
         # time.sleep(10)
         # print(imgurl)
