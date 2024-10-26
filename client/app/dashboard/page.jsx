@@ -108,7 +108,7 @@ const ModernFoodTracker = () => {
     <div className="max-w-4xl mx-auto p-4 space-y-6">
       {/* Header Section */}
       <div className="flex flex-col justify-between items-center">
-        <h1 className="text-2xl font-bold">Nutrition Tracker</h1>
+        <h1 className="text-3xl font-bold">Nutrition Tracker</h1>
         <CameraCapture reload={reload} setReload={setReload} />
       </div>
 
@@ -123,22 +123,22 @@ const ModernFoodTracker = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             {renderProgressBar(
-              currentStats.calories,
+              Math.floor(currentStats.calories),
               dailyGoals.calories,
               "Calories",
             )}
             {renderProgressBar(
-              currentStats.protein,
+              Math.floor(currentStats.protein),
               dailyGoals.protein,
               "Protein (g)",
             )}
             {renderProgressBar(
-              currentStats.carbs,
+              Math.floor(currentStats.carbs),
               dailyGoals.carbs,
               "Carbs (g)",
             )}
             {renderProgressBar(
-              currentStats.fats,
+              Math.floor(currentStats.fats),
               dailyGoals.fats,
               "Fats (g)",
             )}
@@ -155,18 +155,34 @@ const ModernFoodTracker = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-4">
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <div className="text-2xl font-bold text-blue-500">
-                    {currentStats.calories}
+                    {Math.floor(currentStats.calories)}
                   </div>
                   <div className="text-sm text-gray-500">Calories</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <div className="text-2xl font-bold text-green-500">
-                    {currentStats.protein}g
+                    {Math.floor(currentStats.protein)}g
                   </div>
                   <div className="text-sm text-gray-500">Protein</div>
                 </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-blue-500">
+                    {Math.floor(currentStats.carbs)}
+                  </div>
+                  <div className="text-sm text-gray-500">Carbs</div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                  <div className="text-2xl font-bold text-green-500">
+                    {Math.floor(currentStats.fats)}g
+                  </div>
+                  <div className="text-sm text-gray-500">Fats</div>
+                </div>
+              </div>
               </div>
               <div className="text-sm text-gray-500 text-center">
                 {dailyGoals.calories - currentStats.calories}{" "}
@@ -194,11 +210,19 @@ const ModernFoodTracker = () => {
                   </div>
                   <div className="text-right">
                     <div className="font-semibold">
-                      {meal.items.reduce((acc, item) => acc + item.calories, 0)}{" "}
+                      {Math.floor(meal.items.reduce((acc, item) => acc + item.calories, 0))}{" "}
                       kcal
                     </div>
                     <div className="text-sm text-gray-500">
-                      {meal.items.reduce((acc, item) => acc + item.protein, 0)}g
+                      {Math.floor(meal.items.reduce((acc, item) => acc + item.protein, 0))}g
+                      protein
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {Math.floor(meal.items.reduce((acc, item) => acc + item.protein, 0))}g
+                      protein
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {Math.floor(meal.items.reduce((acc, item) => acc + item.protein, 0))}g
                       protein
                     </div>
                   </div>
