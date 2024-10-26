@@ -17,6 +17,7 @@ def jwt_encode(data:str)->str:
     return token
 
 def jwt_decode(token:str):
+    print(token)
     try:
         payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
         return payload['sub']

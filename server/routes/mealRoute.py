@@ -33,25 +33,23 @@ async def convert_to_json(string):
 Base.metadata.create_all(bind=engine)
 @router.post("/upload-meal/", response_model=mealRes)
 async def upload_meal(req: mealReq, db: db_dependancy):
-    try:
+    # try:
         # Create a new Meal object
+        user_id = req.user_id
         imgurl = await upload_image_to_drive(req.image_base64)
         # time.sleep(10)
         # print(imgurl)
         # print(req)
         meal_id = uuid4()
+        response = analyze_meal_image(imgurl)['choices'][0]['message']['content']
+        # print(response)
+        response = await convert_to_json(response)
         new_meal = Meal(
-            name="Breakfast",
-            time="04:09",
+            name=response['name'],
+            time=response["time"],
             image_url=imgurl,
-            items=[
-                {
-                "name": "Apple",
-                "quantity": 1,
-                "calories": 95
-            }
-            ],
-            user_id=UUID(req.user_id)
+            items=response['items'],
+            user_id=UUID(user_id)
         )
         # print(new_meal)
         # Add the meal to the session
@@ -60,10 +58,10 @@ async def upload_meal(req: mealReq, db: db_dependancy):
         db.refresh(new_meal)
 
         return {"message": "Meal created successfully", "error": False}
-    except Exception as e:
-        # Handle exceptions
-        print(f"Error occurred: {e}")
-        raise HTTPException(status_code=500, detail="Failed to create meal")
+    # except Exception as e:
+    #     # Handle exceptions
+    #     print(f"Error occurred: {e}")
+    #     raise HTTPException(status_code=500, detail="Failed to create meal")
 
 
 @router.post("/get-all-meals/", response_model=Any)
