@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models import userReqMod,userResMod
+from models import userRegister,userlogin,userResMod
 from auth import jwt_decode, jwt_encode, hashed_pass, verify_hash_pass
 from database import db_dependancy
 from database import Base,engine
@@ -10,7 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 
 @router.post("/login",response_model=userResMod)
-async def login(req:userReqMod,db:db_dependancy):
+async def login(req:userlogin,db:db_dependancy):
     user=db.query(User)
     findUser=user.filter(User.email==req.email).first()
     if findUser:
@@ -25,13 +25,13 @@ async def login(req:userReqMod,db:db_dependancy):
 
 Base.metadata.create_all(bind=engine)
 @router.post("/register",response_model=userResMod)
-async def register(req:userReqMod,db:db_dependancy):
+async def register(req:userRegister,db:db_dependancy):
     user=db.query(User)
     findUser=user.filter(User.email==req.email).first()
     if findUser:
         return {"error":True,"token":""}
     hash_pass=hashed_pass(req.password)
-    user=User(email=req.email,password=hash_pass)
+    user=User(email=req.email,password=hash_pass,calories=req.calories,protein=req.protein,carbs=req.carbs,fats=req.fats)
     db.add(user)
     db.commit()
     db.refresh(user)

@@ -70,13 +70,9 @@ export default function Login() {
         });
         if (res.data.error == false) {
           Cookies.set("user", res.data.token, { expires: 7 });
-          router.push("/click");
+          router.push("/dashboard");
         } else raiseError("error at registration");
         console.log("Form submitted:", formData);
-        // Example API call:
-        // await axios.post('/api/register', formData);
-
-        // Reset form after successful submission
         setFormData({
           email: "",
           password: "",

@@ -10,3 +10,7 @@ class User(Base):
     id=Column(UUID(as_uuid=True),primary_key=True,default=uuid.uuid4)
     email=Column(String,index=True)
     password=Column(String,index=True)
+    calories=Column(Integer,index=True)
+    protein=Column(Integer,index=True)
+    carbs=Column(Integer,index=True)
+    fats=Column(Integer,index=True)

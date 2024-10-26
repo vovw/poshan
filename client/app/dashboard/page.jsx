@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Camera, Utensils, TrendingUp } from "lucide-react";
@@ -7,16 +7,36 @@ import CameraCapture from "../click/click";
 import axios from "axios";
 import Cookies from "js-cookie";
 const ModernFoodTracker = () => {
-  const dailyStats = {
-    calories: { current: 1250, goal: 2000 },
-    protein: { current: 45, goal: 80 },
-    carbs: { current: 130, goal: 200 },
-    fats: { current: 35, goal: 55 },
-  };
+  const [meals, setMeals] = useState([]);
+  const [dailyStats, setDailyStats] = useState({
+    calories: { current: 0, goal: 2000 },
+    protein: { current: 0, goal: 80 },
+    carbs: { current: 0, goal: 200 },
+    fats: { current: 0, goal: 55 },
+  });
+
+  useMemo(() => {
+    let newstats = {
+      calories: { current: 0, goal: 2000 },
+      protein: { current: 0, goal: 80 },
+      carbs: { current: 0, goal: 200 },
+      fats: { current: 0, goal: 55 },
+    };
+    meals.forEach((meal) => {
+      meal.items.forEach((item) => {
+        console.log(item);
+        newstats.calories.current += item.calories;
+        newstats.protein.current += item.protein;
+        newstats.carbs.current += item.carbs;
+        newstats.fats.current += item.fats;
+      });
+    });
+    setDailyStats(newstats);
+  }, [meals]);
+
   useEffect(() => {
     fetchMeals();
   }, []);
-  const [meals, setMeals] = useState([]);
   let fetchMeals = async () => {
     try {
       let user = Cookies.get("user");
@@ -37,65 +57,6 @@ const ModernFoodTracker = () => {
       console.log(error);
     }
   };
-
-  // const meals = [
-  //   {
-  //     id: 1,
-  //     time: "8:30 AM",
-  //     name: "Breakfast",
-  //     imageUrl: "/api/placeholder/300/200",
-  //     items: [
-  //       {
-  //         name: "Masala Dosa",
-  //         quantity: 1,
-  //         calories: 250,
-  //         protein: 8,
-  //         carbs: 45,
-  //         fats: 6,
-  //       },
-  //       {
-  //         name: "Coconut Chutney",
-  //         quantity: 1,
-  //         calories: 120,
-  //         protein: 3,
-  //         carbs: 8,
-  //         fats: 9,
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     time: "1:30 PM",
-  //     name: "Lunch",
-  //     imageUrl: "/api/placeholder/300/200",
-  //     items: [
-  //       {
-  //         name: "Roti",
-  //         quantity: 3,
-  //         calories: 240,
-  //         protein: 9,
-  //         carbs: 45,
-  //         fats: 1.5,
-  //       },
-  //       {
-  //         name: "Dal",
-  //         quantity: 1,
-  //         calories: 150,
-  //         protein: 9,
-  //         carbs: 20,
-  //         fats: 3,
-  //       },
-  //       {
-  //         name: "Mixed Veg Curry",
-  //         quantity: 1,
-  //         calories: 180,
-  //         protein: 6,
-  //         carbs: 20,
-  //         fats: 8,
-  //       },
-  //     ],
-  //   },
-  // ];
 
   const renderProgressBar = (current, goal, label) => (
     <div className="space-y-2">
@@ -191,11 +152,6 @@ const ModernFoodTracker = () => {
             className="overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="flex">
-              <img
-                src={meal.image_url}
-                alt={meal.name}
-                className="w-32 h-32 object-cover"
-              />
               <div className="p-4 flex-1">
                 <div className="flex justify-between items-start mb-2">
                   <div>
