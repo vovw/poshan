@@ -1,7 +1,7 @@
 # Poshan AI
 
-Poshan AI is a project designed to [describe what it does, e.g., "enhance nutritional planning using AI-powered tools"].
+Nutrionist in your pocket.
 
 ## Hosted URL
 
-Poshan AI is currently hosted [here](https://poshan-taupe.vercel.app)
+Poshan is currently hosted [here](https://poshan-taupe.vercel.app)
