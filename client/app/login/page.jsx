@@ -20,7 +20,6 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,7 +65,7 @@ export default function Login() {
       setIsLoading(true);
       try {
         // Add your registration logic here
-        let res = await axios.post(`${BACKEND_URL}/login`, formData, {
+        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, formData, {
           headers,
         });
         if (res.data.error == false) {

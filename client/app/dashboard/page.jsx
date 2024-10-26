@@ -13,7 +13,6 @@ const ModernFoodTracker = () => {
     carbs: { current: 130, goal: 200 },
     fats: { current: 35, goal: 55 },
   };
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   useEffect(() => {
     fetchMeals();
   }, []);
@@ -26,7 +25,7 @@ const ModernFoodTracker = () => {
         Accept: "application/json",
       };
       let response = await axios.post(
-        `${BACKEND_URL}/get-all-meals`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/get-all-meals`,
         { user_id: user },
         { headers },
       );

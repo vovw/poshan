@@ -10,7 +10,6 @@ const CameraCapture = () => {
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState(null);
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   // Start camera
   const startCamera = async () => {
     try {
@@ -70,7 +69,7 @@ const CameraCapture = () => {
       const user = Cookies.get("user");
       console.log(user);
       let response = await axios.post(
-        `${BACKEND_URL}/upload-meal`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload-meal`,
         {
           user_id: user,
           image_base64: base64,
