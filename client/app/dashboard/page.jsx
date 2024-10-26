@@ -8,34 +8,43 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const ModernFoodTracker = () => {
   const [meals, setMeals] = useState([]);
-  const [dailyStats, setDailyStats] = useState({
-    calories: { current: 0, goal: 2000 },
-    protein: { current: 0, goal: 80 },
-    carbs: { current: 0, goal: 200 },
-    fats: { current: 0, goal: 55 },
+  const [dailyGoals, setDailyGoals] = useState({
+    calories: 2000,
+    protein: 80,
+    carbs: 200,
+    fats: 55,
   });
+
+  const [currentStats, setCurrentStats] = useState({
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fats: 0,
+  });
+
 
   useMemo(() => {
     let newstats = {
-      calories: { current: 0, goal: 2000 },
-      protein: { current: 0, goal: 80 },
-      carbs: { current: 0, goal: 200 },
-      fats: { current: 0, goal: 55 },
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fats: 0,
     };
     meals.forEach((meal) => {
       meal.items.forEach((item) => {
         console.log(item);
-        newstats.calories.current += item.calories;
-        newstats.protein.current += item.protein;
-        newstats.carbs.current += item.carbs;
-        newstats.fats.current += item.fats;
+        newstats.calories += item.calories;
+        newstats.protein += item.protein;
+        newstats.carbs += item.carbs;
+        newstats.fats += item.fats;
       });
     });
-    setDailyStats(newstats);
+    setCurrentStats(newstats);
   }, [meals]);
 
   useEffect(() => {
     fetchMeals();
+    fetchGoals();
   }, []);
   let fetchMeals = async () => {
     try {
@@ -52,6 +61,31 @@ const ModernFoodTracker = () => {
       console.log(response.data);
       if (response.data) {
         setMeals(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  let fetchGoals = async () => {
+    try {
+      let user = Cookies.get("user");
+      let headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      let response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/get-goals`,
+        { user_id: user },
+        { headers },
+      );
+      console.log(response.data);
+      if (response.data) {
+        setDailyGoals({
+          calories:response.data.calories,
+          protein:response.data.protein,
+          carbs:response.data.carbs,
+          fats:response.data.fats
+        });
       }
     } catch (error) {
       console.log(error);
@@ -89,23 +123,23 @@ const ModernFoodTracker = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             {renderProgressBar(
-              dailyStats.calories.current,
-              dailyStats.calories.goal,
+              currentStats.calories,
+              dailyGoals.calories,
               "Calories",
             )}
             {renderProgressBar(
-              dailyStats.protein.current,
-              dailyStats.protein.goal,
+              currentStats.protein,
+              dailyGoals.protein,
               "Protein (g)",
             )}
             {renderProgressBar(
-              dailyStats.carbs.current,
-              dailyStats.carbs.goal,
+              currentStats.carbs,
+              dailyGoals.carbs,
               "Carbs (g)",
             )}
             {renderProgressBar(
-              dailyStats.fats.current,
-              dailyStats.fats.goal,
+              currentStats.fats,
+              dailyGoals.fats,
               "Fats (g)",
             )}
           </CardContent>
@@ -123,19 +157,19 @@ const ModernFoodTracker = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <div className="text-2xl font-bold text-blue-500">
-                    {dailyStats.calories.current}
+                    {currentStats.calories}
                   </div>
                   <div className="text-sm text-gray-500">Calories</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow-sm">
                   <div className="text-2xl font-bold text-green-500">
-                    {dailyStats.protein.current}g
+                    {currentStats.protein}g
                   </div>
                   <div className="text-sm text-gray-500">Protein</div>
                 </div>
               </div>
               <div className="text-sm text-gray-500 text-center">
-                {dailyStats.calories.goal - dailyStats.calories.current}{" "}
+                {dailyGoals.calories - currentStats.calories}{" "}
                 calories remaining
               </div>
             </div>

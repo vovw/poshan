@@ -10,7 +10,7 @@ from routes import userRoute
 from routes import mealRoute
 app = FastAPI()
 
-origins=["https://poshan-taupe.vercel.app"]
+origins=["https://poshan-taupe.vercel.app","http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Domains that can talk to your API

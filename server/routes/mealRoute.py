@@ -70,5 +70,5 @@ async def upload_meal(req: mealReq, db: db_dependancy):
 @router.post("/get-all-meals/", response_model=Any)
 async def get_meals(req: getMealsReq, db: db_dependancy):
     decoded = jwt_decode(req.user_id)
-    allmeals = db.query(Meal).filter(Meal.user_id == decoded).order(desc(Meal.time)).all()
+    allmeals = db.query(Meal).filter(Meal.user_id == decoded).all()
     return [jsonable_encoder(meal) for meal in allmeals]
