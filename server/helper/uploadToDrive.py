@@ -33,7 +33,7 @@ async def upload_image_to_drive(base64_image):
     drive_response = google_drive_service.save_file('uploaded_image.png', temp_file_path, 'image/png', folder['id'])
 
     # Print the URL of the uploaded image
-    imgurl = f"https://drive.google.com/uc?id={drive_response['id']}"
+    imgurl = f"https://lh3.googleusercontent.com/d/{drive_response['id']}"
     # print(f"Image uploaded: https://drive.google.com/uc?id={drive_response['id']}")
     # Clean up temporary file
     os.remove(temp_file_path)
