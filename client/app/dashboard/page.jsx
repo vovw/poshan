@@ -1,9 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Camera, Utensils, TrendingUp } from "lucide-react";
 import CameraCapture from "../click/click";
+import axios from "axios";
+import Cookies from "js-cookie";
 const ModernFoodTracker = () => {
   const dailyStats = {
     calories: { current: 1250, goal: 2000 },
@@ -11,65 +13,86 @@ const ModernFoodTracker = () => {
     carbs: { current: 130, goal: 200 },
     fats: { current: 35, goal: 55 },
   };
+  let meals = [];
+  useEffect(() => {
+    fetchMeals();
+  }, []);
+  let fetchMeals = async () => {
+    try {
+      let user = Cookies.get("user");
+      let headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      let response = await axios.post(
+        "http://127.0.0.1:8000/get-all-meals",
+        { user_id: user },
+        { headers },
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const meals = [
-    {
-      id: 1,
-      time: "8:30 AM",
-      name: "Breakfast",
-      imageUrl: "/api/placeholder/300/200",
-      items: [
-        {
-          name: "Masala Dosa",
-          quantity: 1,
-          calories: 250,
-          protein: 8,
-          carbs: 45,
-          fats: 6,
-        },
-        {
-          name: "Coconut Chutney",
-          quantity: 1,
-          calories: 120,
-          protein: 3,
-          carbs: 8,
-          fats: 9,
-        },
-      ],
-    },
-    {
-      id: 2,
-      time: "1:30 PM",
-      name: "Lunch",
-      imageUrl: "/api/placeholder/300/200",
-      items: [
-        {
-          name: "Roti",
-          quantity: 3,
-          calories: 240,
-          protein: 9,
-          carbs: 45,
-          fats: 1.5,
-        },
-        {
-          name: "Dal",
-          quantity: 1,
-          calories: 150,
-          protein: 9,
-          carbs: 20,
-          fats: 3,
-        },
-        {
-          name: "Mixed Veg Curry",
-          quantity: 1,
-          calories: 180,
-          protein: 6,
-          carbs: 20,
-          fats: 8,
-        },
-      ],
-    },
-  ];
+  // const meals = [
+  // {
+  //   id: 1,
+  //   time: "8:30 AM",
+  //   name: "Breakfast",
+  //   imageUrl: "/api/placeholder/300/200",
+  //   items: [
+  //     {
+  //       name: "Masala Dosa",
+  //       quantity: 1,
+  //       calories: 250,
+  //       protein: 8,
+  //       carbs: 45,
+  //       fats: 6,
+  //     },
+  //     {
+  //       name: "Coconut Chutney",
+  //       quantity: 1,
+  //       calories: 120,
+  //       protein: 3,
+  //       carbs: 8,
+  //       fats: 9,
+  //     },
+  //   ],
+  // },
+  // {
+  //   id: 2,
+  //   time: "1:30 PM",
+  //   name: "Lunch",
+  //   imageUrl: "/api/placeholder/300/200",
+  //   items: [
+  //     {
+  //       name: "Roti",
+  //       quantity: 3,
+  //       calories: 240,
+  //       protein: 9,
+  //       carbs: 45,
+  //       fats: 1.5,
+  //     },
+  //     {
+  //       name: "Dal",
+  //       quantity: 1,
+  //       calories: 150,
+  //       protein: 9,
+  //       carbs: 20,
+  //       fats: 3,
+  //     },
+  //     {
+  //       name: "Mixed Veg Curry",
+  //       quantity: 1,
+  //       calories: 180,
+  //       protein: 6,
+  //       carbs: 20,
+  //       fats: 8,
+  //     },
+  //   ],
+  // },
+  // ];
 
   const renderProgressBar = (current, goal, label) => (
     <div className="space-y-2">
@@ -159,7 +182,7 @@ const ModernFoodTracker = () => {
       {/* Meals List */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Todays Meals</h2>
-        {meals.map((meal) => (
+        {meals?.map((meal) => (
           <Card
             key={meal.id}
             className="overflow-hidden hover:shadow-lg transition-shadow"

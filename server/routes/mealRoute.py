@@ -19,9 +19,9 @@ async def convert_to_json(string):
     start = string.find("{")
     end = string.rfind("}")
     if start != -1 and end != -1:
-        json_str = string[start:end + 1]  
+        json_str = string[start:end + 1]
         json_str = json_str.replace("'", "\"")  # Convert single quotes to double quotes
-        
+
         try:
             json_data = json.loads(json_str)  # Parse the JSON string
             return json_data  # Return the parsed JSON as a dictionary
@@ -29,12 +29,13 @@ async def convert_to_json(string):
             return f"Failed to decode JSON: {e}"
     else:
         return "No JSON found"
-    
+
 Base.metadata.create_all(bind=engine)
 @router.post("/upload-meal/", response_model=mealRes)
 async def upload_meal(req: mealReq, db: db_dependancy):
     try:
         # Create a new Meal object
+        decoded=jwt_decode(req.user_id)
         imgurl = await upload_image_to_drive(req.image_base64)
         # time.sleep(10)
         # print(imgurl)
@@ -51,7 +52,7 @@ async def upload_meal(req: mealReq, db: db_dependancy):
                 "calories": 95
             }
             ],
-            user_id=UUID(req.user_id)
+            user_id=UUID(decoded)
         )
         # print(new_meal)
         # Add the meal to the session
