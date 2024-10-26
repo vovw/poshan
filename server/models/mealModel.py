@@ -9,6 +9,12 @@ class mealReq(BaseModel):
 class mealRes(BaseModel):
     message:str
     error: bool
+    name:str
+    time:str
+    image_url:str
+    items:List[Any]
+    user_id:str
+    
 
 class getMealsReq(BaseModel):
     user_id:str
