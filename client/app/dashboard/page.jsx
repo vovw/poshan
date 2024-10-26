@@ -18,6 +18,7 @@ const ModernFoodTracker = () => {
   useEffect(() => {
     fetchMeals();
   }, []);
+  const [meals, setMeals] = useState([]);
   let fetchMeals = async () => {
     try {
       let user = Cookies.get("user");
@@ -31,68 +32,71 @@ const ModernFoodTracker = () => {
         { headers },
       );
       console.log(response.data);
+      if (response.data) {
+        setMeals(response.data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   // const meals = [
-  // {
-  //   id: 1,
-  //   time: "8:30 AM",
-  //   name: "Breakfast",
-  //   imageUrl: "/api/placeholder/300/200",
-  //   items: [
-  //     {
-  //       name: "Masala Dosa",
-  //       quantity: 1,
-  //       calories: 250,
-  //       protein: 8,
-  //       carbs: 45,
-  //       fats: 6,
-  //     },
-  //     {
-  //       name: "Coconut Chutney",
-  //       quantity: 1,
-  //       calories: 120,
-  //       protein: 3,
-  //       carbs: 8,
-  //       fats: 9,
-  //     },
-  //   ],
-  // },
-  // {
-  //   id: 2,
-  //   time: "1:30 PM",
-  //   name: "Lunch",
-  //   imageUrl: "/api/placeholder/300/200",
-  //   items: [
-  //     {
-  //       name: "Roti",
-  //       quantity: 3,
-  //       calories: 240,
-  //       protein: 9,
-  //       carbs: 45,
-  //       fats: 1.5,
-  //     },
-  //     {
-  //       name: "Dal",
-  //       quantity: 1,
-  //       calories: 150,
-  //       protein: 9,
-  //       carbs: 20,
-  //       fats: 3,
-  //     },
-  //     {
-  //       name: "Mixed Veg Curry",
-  //       quantity: 1,
-  //       calories: 180,
-  //       protein: 6,
-  //       carbs: 20,
-  //       fats: 8,
-  //     },
-  //   ],
-  // },
+  //   {
+  //     id: 1,
+  //     time: "8:30 AM",
+  //     name: "Breakfast",
+  //     imageUrl: "/api/placeholder/300/200",
+  //     items: [
+  //       {
+  //         name: "Masala Dosa",
+  //         quantity: 1,
+  //         calories: 250,
+  //         protein: 8,
+  //         carbs: 45,
+  //         fats: 6,
+  //       },
+  //       {
+  //         name: "Coconut Chutney",
+  //         quantity: 1,
+  //         calories: 120,
+  //         protein: 3,
+  //         carbs: 8,
+  //         fats: 9,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     time: "1:30 PM",
+  //     name: "Lunch",
+  //     imageUrl: "/api/placeholder/300/200",
+  //     items: [
+  //       {
+  //         name: "Roti",
+  //         quantity: 3,
+  //         calories: 240,
+  //         protein: 9,
+  //         carbs: 45,
+  //         fats: 1.5,
+  //       },
+  //       {
+  //         name: "Dal",
+  //         quantity: 1,
+  //         calories: 150,
+  //         protein: 9,
+  //         carbs: 20,
+  //         fats: 3,
+  //       },
+  //       {
+  //         name: "Mixed Veg Curry",
+  //         quantity: 1,
+  //         calories: 180,
+  //         protein: 6,
+  //         carbs: 20,
+  //         fats: 8,
+  //       },
+  //     ],
+  //   },
   // ];
 
   const renderProgressBar = (current, goal, label) => (
@@ -190,7 +194,7 @@ const ModernFoodTracker = () => {
           >
             <div className="flex">
               <img
-                src={meal.imageUrl}
+                src={meal.image_url}
                 alt={meal.name}
                 className="w-32 h-32 object-cover"
               />
