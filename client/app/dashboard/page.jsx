@@ -14,7 +14,6 @@ const ModernFoodTracker = () => {
     fats: { current: 35, goal: 55 },
   };
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  let meals = [];
   useEffect(() => {
     fetchMeals();
   }, []);
