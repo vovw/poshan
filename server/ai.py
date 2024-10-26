@@ -70,9 +70,7 @@ Ensure:
         },
         data=json.dumps({
             # "model": "meta-llama/llama-3.2-90b-vision-instruct",
-            # "model": "google/gemini-pro-vision",
-            "model": "anthropic/claude-3.5-sonnet",
-            # "model": "meta-llama/llama-3.2-11b-vision-instruct:free",
+            "model": "meta-llama/llama-3.2-11b-vision-instruct:free",
             "messages": [
                 {
                     "role": "user",
