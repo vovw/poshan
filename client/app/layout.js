@@ -17,6 +17,10 @@ export const metadata = {
   description: "made by love @ mumbai hacks",
 };
 
+export const viewport = {
+  themeColor: 'white',
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

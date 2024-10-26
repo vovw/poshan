@@ -12,6 +12,7 @@ import time
 from auth import jwt_decode, jwt_encode, hashed_pass, verify_hash_pass
 from typing import Any
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import desc
 
 router = APIRouter()
 
@@ -69,5 +70,5 @@ async def upload_meal(req: mealReq, db: db_dependancy):
 @router.post("/get-all-meals/", response_model=Any)
 async def get_meals(req: getMealsReq, db: db_dependancy):
     decoded = jwt_decode(req.user_id)
-    allmeals = db.query(Meal).filter(Meal.user_id == decoded).all()
+    allmeals = db.query(Meal).filter(Meal.user_id == decoded).order(desc(Meal.time)).all()
     return [jsonable_encoder(meal) for meal in allmeals]
