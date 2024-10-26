@@ -81,9 +81,13 @@ export default function Register() {
       setIsLoading(true);
       try {
         // Add your registration logic here
-        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, formData, {
-          headers,
-        });
+        let res = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/register`,
+          formData,
+          {
+            headers,
+          },
+        );
         if (res.data.error == false) {
           Cookies.set("user", res.data.token, { expires: 7 });
           router.push("/dashboard");
@@ -111,77 +115,94 @@ export default function Register() {
   };
 
   return isReg ? (
-    <div className="flex flex-row justify-center">
-      <Card className="w-[350px] bg-zinc-950 text-white">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-center">
-            Set Nutrition Targets
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="calories">Daily Calories</Label>
-              <Input
-                id="calories"
-                name="calories"
-                type="number"
-                value={formData.calories}
-                onChange={handleChange}
-                placeholder="e.g. 2000"
-                className="bg-zinc-900 border-zinc-800 text-white"
-              />
-            </div>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <Card className="bg-white shadow-sm rounded-lg">
+          <CardHeader className="relative space-y-1 pb-8">
+            <CardTitle className="text-2xl font-bold text-center text-black">
+              Set Nutrition Targets
+            </CardTitle>
+            <p className="text-gray-500 text-center text-sm">
+              Define your daily macro goals
+            </p>
+          </CardHeader>
+          <CardContent className="relative">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="calories" className="text-gray-600">
+                    Daily Calories
+                  </Label>
+                  <Input
+                    id="calories"
+                    name="calories"
+                    type="number"
+                    value={formData.calories}
+                    onChange={handleChange}
+                    placeholder="e.g. 2000"
+                    className="h-12 rounded-lg focus:ring-2 focus:ring-black/5 border-gray-200"
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="protein">Protein (g)</Label>
-              <Input
-                id="protein"
-                name="protein"
-                type="number"
-                value={formData.protein}
-                onChange={handleChange}
-                placeholder="e.g. 150"
-                className="bg-zinc-900 border-zinc-800 text-white"
-              />
-            </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="protein" className="text-gray-600">
+                      Protein (g)
+                    </Label>
+                    <Input
+                      id="protein"
+                      name="protein"
+                      type="number"
+                      value={formData.protein}
+                      onChange={handleChange}
+                      placeholder="150"
+                      className="h-12 rounded-lg focus:ring-2 focus:ring-black/5 border-gray-200"
+                    />
+                  </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="carbs">Carbs (g)</Label>
-              <Input
-                id="carbs"
-                name="carbs"
-                value={formData.carbs}
-                onChange={handleChange}
-                type="number"
-                placeholder="e.g. 250"
-                className="bg-zinc-900 border-zinc-800 text-white"
-              />
-            </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="carbs" className="text-gray-600">
+                      Carbs (g)
+                    </Label>
+                    <Input
+                      id="carbs"
+                      name="carbs"
+                      type="number"
+                      value={formData.carbs}
+                      onChange={handleChange}
+                      placeholder="250"
+                      className="h-12 rounded-lg focus:ring-2 focus:ring-black/5 border-gray-200"
+                    />
+                  </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="fats">Fats (g)</Label>
-              <Input
-                id="fats"
-                name="fats"
-                value={formData.fats}
-                onChange={handleChange}
-                type="number"
-                placeholder="e.g. 65"
-                className="bg-zinc-900 border-zinc-800 text-white"
-              />
-            </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="fats" className="text-gray-600">
+                      Fats (g)
+                    </Label>
+                    <Input
+                      id="fats"
+                      name="fats"
+                      type="number"
+                      value={formData.fats}
+                      onChange={handleChange}
+                      placeholder="65"
+                      className="h-12 rounded-lg focus:ring-2 focus:ring-black/5 border-gray-200"
+                    />
+                  </div>
+                </div>
+              </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              onSubmit={handleSubmit}
-            >
-              Save Targets
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              <Button
+                type="submit"
+                className="w-full h-12 bg-black hover:bg-black/90 text-white font-medium rounded-lg
+                            transition-colors duration-200"
+              >
+                Save Targets
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   ) : (
     <div className="mt-32">
