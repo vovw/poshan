@@ -22,7 +22,7 @@ export default function Register() {
   const router = useRouter();
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const validateForm = () => {
     let tempErrors = {};
     if (!formData.email.trim()) {
@@ -66,7 +66,7 @@ export default function Register() {
       setIsLoading(true);
       try {
         // Add your registration logic here
-        let res = await axios.post("http://127.0.0.1:8000/register", formData, {
+        let res = await axios.post(`${BACKEND_URL}/register`, formData, {
           headers,
         });
         if (res.data.error == false) {

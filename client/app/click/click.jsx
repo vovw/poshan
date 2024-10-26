@@ -10,7 +10,7 @@ const CameraCapture = () => {
   const [photo, setPhoto] = useState(null);
   const [stream, setStream] = useState(null);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState(null);
-
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   // Start camera
   const startCamera = async () => {
     try {
@@ -28,7 +28,6 @@ const CameraCapture = () => {
       console.error("Error:", err);
     }
   };
-
   // Take photo
   const takePhoto = async () => {
     const canvas = document.createElement("canvas");
@@ -71,7 +70,7 @@ const CameraCapture = () => {
       const user = Cookies.get("user");
       console.log(user);
       let response = await axios.post(
-        "http://127.0.0.1:8000/upload-meal",
+        `${BACKEND_URL}/upload-meal`,
         {
           user_id: user,
           image_base64: base64,

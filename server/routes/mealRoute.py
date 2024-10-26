@@ -26,8 +26,10 @@ async def convert_to_json(string):
             json_data = json.loads(json_str)  # Parse the JSON string
             return json_data  # Return the parsed JSON as a dictionary
         except json.JSONDecodeError as e:
+            print(f"Failed to decode json: {string}")
             return f"Failed to decode JSON: {e}"
     else:
+        print(string)
         return "No JSON found"
 
 Base.metadata.create_all(bind=engine)
