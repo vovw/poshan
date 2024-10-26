@@ -106,26 +106,32 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
       {/* Social Proof */}
       <section id="testimonials" className="bg-green-50 py-20">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-green-800 mb-12">
-            Trusted by Thousands
+            Trusted by our 50 users
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((testimonial) => (
-              <div
-                key={testimonial}
-                className="bg-white p-6 rounded-xl shadow-sm"
-              >
-                <p className="text-gray-600 mb-4">
-                  &quot;poषण has completely changed how I think about food. The
-                  insights are incredible!&quot;
-                </p>
-                <div className="font-semibold text-green-800">- Happy User</div>
-              </div>
-            ))}
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <p className="text-gray-600 mb-4">
+                &quot;The userinterface is very cute and nice&quot;
+              </p>
+              <div className="font-semibold text-green-800">- Prajwal</div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <p className="text-gray-600 mb-4">
+                &quot;The login and user expirenace is very minimal and
+                straightforward&quot;
+              </p>
+              <div className="font-semibold text-green-800">- Shri</div>
+            </div>
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <p className="text-gray-600 mb-4">
+                &quot;The idea is very revolutionary if done right&quot;
+              </p>
+              <div className="font-semibold text-green-800">- Sujal</div>
+            </div>
           </div>
         </div>
       </section>
